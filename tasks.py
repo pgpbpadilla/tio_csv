@@ -5,6 +5,12 @@ from cli_wrappers import users
 cli_image_name = 'tio_cli'
 
 
+@task
+def build(ctx):
+    """Builds Docker image for a fake CLI"""
+    ctx.run('docker build -t {} .'.format(cli_image_name))
+
+
 def build_docker_cmd(cli_cmd):
     base_docker_cmd = 'docker run -i --rm {}'.format(cli_image_name)
     return '{} {}'.format(base_docker_cmd, cli_cmd)
@@ -33,6 +39,13 @@ def upsert(ctx, filename):
 @task(help={
     'filename': "The input file to read user-group associations"
 })
-def assign_group(_, filename):
+def assign_group(ctx, filename):
     """Assigns the users to the specified groups."""
-    pass
+    users_by_group = users.load_user_by_group(filename)
+    for group_id, user_id in users_by_group:
+        assign_cmd = build_docker_cmd(
+            'assign user={} group={}'.format(group_id, user_id)
+        )
+        ctx.run(assign_cmd, echo=True)
+        print('Commdand successful')
+

@@ -1,3 +1,5 @@
 - `virtualenv .ve` - Create virtual Python environment
 - `. .ve/bin/activate` - Activate the newly created environment
 - `pip install -r requirements.txt` - Install Python dependencies
+- `inv -l` - List available tasks
+- `inv -h <taskname>` - Help for the specified task.
