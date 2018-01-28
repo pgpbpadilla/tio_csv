@@ -10,10 +10,11 @@ class Group:
         self.name = name
 
 
-def upsert_from_file(filename):
+def upsert_from_file(ctx, filename):
     users = load_users(filename)
     for u in users:
         print('Inserting user: {}'.format(u.id))
+    ctx.run('echo "This is a Bash/Shell command"', echo=True)
 
 
 def load_user_groups(filename):
@@ -26,9 +27,10 @@ def load_user_groups(filename):
             yield user, group
 
 
-def assign_groups(filename):
+def assign_groups(ctx, filename):
     for user, group in load_user_groups(filename):
         print('Assigning user: {} to group: {}'.format(user.id, group.id))
+    ctx.run('echo "This is another shell command"', echo=True)
 
 
 def load_users(filename):
