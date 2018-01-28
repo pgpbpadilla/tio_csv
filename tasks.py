@@ -21,7 +21,7 @@ def build_docker_cmd(cli_cmd):
 })
 def upsert(ctx, filename):
     """Insert or Create the users in the specified file."""
-    list_cmd = build_docker_cmd("list users juan johndoe")
+    list_cmd = build_docker_cmd("cli list users juan johndoe")
     list_users_result = ctx.run(list_cmd, echo=True)
 
     users_to_insert = users.load_users(filename)
@@ -31,7 +31,7 @@ def upsert(ctx, filename):
             print('User: {} exists'.format(user.id))
         else:
             print('User: {} not found, inserting'.format(user.id))
-            insert_cmd = build_docker_cmd('create user {}'.format(user.id))
+            insert_cmd = build_docker_cmd('cli create user {}'.format(user.id))
             insert_result = ctx.run(insert_cmd, echo=True)
             print('User: {} created'.format(user.id))
 
@@ -44,7 +44,7 @@ def assign_group(ctx, filename):
     users_by_group = users.load_user_by_group(filename)
     for group_id, user_id in users_by_group:
         assign_cmd = build_docker_cmd(
-            'assign user={} group={}'.format(group_id, user_id)
+            'cli assign user={} group={}'.format(group_id, user_id)
         )
         ctx.run(assign_cmd, echo=True)
         print('Commdand successful')
